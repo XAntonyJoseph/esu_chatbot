@@ -1,6 +1,7 @@
 import streamlit as st
 import sqlite3
 from datetime import datetime
+import pytz
 from streamlit_mic_recorder import speech_to_text
 
 # =================================
@@ -742,17 +743,23 @@ SPACING
 
 def get_greeting():
 
-    hour = datetime.now().hour
+    sri_lanka = pytz.timezone("Asia/Colombo")
+
+    current_time = datetime.now(sri_lanka)
+
+    hour = current_time.hour
 
     if hour < 12:
+
         return "🌤️ Good Morning"
 
     elif hour < 18:
+
         return "☀️ Good Afternoon"
 
     else:
-        return "🌙 Good Evening"
 
+        return "🌙 Good Evening"
 # =================================
 # NLP PREPROCESSING
 # =================================
