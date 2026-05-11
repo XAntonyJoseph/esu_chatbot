@@ -1,0 +1,261 @@
+
+{
+  "faq_data": {
+
+    "software_engineering_and_hnd": [
+
+      {
+        "intent": "program_details",
+        "questions": [
+          "What's in the Software Engineering course?",
+          "Can you explain the HND path to a London Met degree?",
+          "Is the HND equivalent to the first two years of university?",
+          "Tell me about the SE curriculum.",
+          "What subjects are included in software engineering?",
+          "What do students learn in HND SE?",
+          "What modules are taught in software engineering?",
+          "Explain the software engineering programme.",
+          "Can you tell me about the SE course structure?",
+          "What is covered in HND software engineering?"
+        ],
+        "answer": "The HND in Software Engineering is a 2-year vocational qualification covering programming, databases, networking, software development, and system analysis. Students can progress to the London Metropolitan University Top-up degree."
+      },
+
+      {
+        "intent": "entry_requirements",
+        "questions": [
+          "Do I need ALs for Software Engineering?",
+          "What are the requirements for HND?",
+          "My son just finished OLs, can he join?",
+          "Entry criteria for London Met top-up?",
+          "Can I apply after A/Ls?",
+          "What qualifications are needed?",
+          "Can I join after O/Ls?",
+          "Minimum requirements for software engineering?",
+          "Do I need maths for software engineering?",
+          "Eligibility for HND programme?"
+        ],
+        "answer": "Students with A/L qualifications or a recognized foundation programme can apply. HND holders can apply for the London Met Top-up programme."
+      },
+
+      {
+        "intent": "degree_duration",
+        "questions": [
+          "How long is the software engineering degree?",
+          "What is the duration of the HND?",
+          "How many years is the SE programme?",
+          "When can I graduate?",
+          "How long does the degree take?",
+          "Duration of software engineering course?",
+          "Is it a 3 year degree?",
+          "Time required to complete the programme?"
+        ],
+        "answer": "The HND programme usually takes 18–24 months, while the complete BSc Top-up pathway generally takes around 3 years."
+      }
+
+    ],
+
+    "financials": [
+
+      {
+        "intent": "payment_plans",
+        "questions": [
+          "How much is the total fee?",
+          "Can I pay in installments?",
+          "Are there monthly payment options for parents?",
+          "Any discounts for full payment?",
+          "Can I pay monthly?",
+          "What are the fee payment methods?",
+          "Do you provide installment plans?",
+          "Can parents pay semester wise?",
+          "How do I settle the course fees?",
+          "Do you support student loans?"
+        ],
+        "answer": "ESOFT offers flexible payment plans including monthly installments and semester-based payments. Discounts may be available for full upfront payments."
+      },
+
+      {
+        "intent": "fee_information",
+        "questions": [
+          "What is the course fee?",
+          "How much does software engineering cost?",
+          "Total fee for the degree?",
+          "Registration fee details?",
+          "How much is the HND?",
+          "Any hidden charges?",
+          "Can I get the fee structure?",
+          "What is the payment structure?"
+        ],
+        "answer": "The total fee depends on the selected programme and pathway. Students can obtain the latest fee structure from the admissions office."
+      }
+
+    ],
+
+    "logistics_and_intakes": [
+
+      {
+        "intent": "intake_information",
+        "questions": [
+          "When is the next intake?",
+          "Missed the Jan intake, when is the next one?",
+          "Are there multiple start dates?",
+          "When do classes start?",
+          "What is the next batch date?",
+          "When can I enroll?",
+          "Are admissions open?",
+          "Application deadline?",
+          "Can I join mid year?",
+          "Upcoming intake details?"
+        ],
+        "answer": "Major intakes usually occur in January, May/June, and September/October."
+      },
+
+      {
+        "intent": "learning_mode",
+        "questions": [
+          "Is there a weekend batch?",
+          "Can I study while working?",
+          "Are classes online or on-campus?",
+          "What is the weekly schedule like?",
+          "Do you offer part-time classes?",
+          "Can I study remotely?",
+          "Do you have online learning?",
+          "Weekend lectures available?",
+          "Can working professionals study here?",
+          "Blended learning options?"
+        ],
+        "answer": "ESOFT offers full-time and part-time batches with blended learning support including physical lectures and online learning resources."
+      },
+
+      {
+        "intent": "lecture_schedule",
+        "questions": [
+          "What time do lectures start?",
+          "Lecture hours for SE?",
+          "Are there evening classes?",
+          "How many days per week are classes?",
+          "Timetable for software engineering?",
+          "Weekend class timings?",
+          "Lecture schedule details?"
+        ],
+        "answer": "Full-time lectures are generally conducted on weekdays, while part-time classes are held during weekends and evenings."
+      }
+
+    ],
+
+    "career_and_global_mobility": [
+
+      {
+        "intent": "uk_transfer",
+        "questions": [
+          "Can I go to London Met in UK for my final year?",
+          "Is the degree recognized in England?",
+          "How do I transfer to London?",
+          "Can my child finish the degree in the UK?",
+          "Can I transfer abroad?",
+          "Can I study in UK after HND?",
+          "Do you offer UK transfer options?",
+          "Can I complete my degree overseas?",
+          "Study abroad opportunities available?"
+        ],
+        "answer": "Students completing their HND can transfer to London Metropolitan University in the UK to complete the final year, depending on academic eligibility and visa requirements."
+      },
+
+      {
+        "intent": "internships_and_careers",
+        "questions": [
+          "Do you provide job placement?",
+          "Are there internships for SE students?",
+          "What kind of jobs can I get after this?",
+          "Does ESOFT help with finding a job?",
+          "Career support available?",
+          "Will I get internship opportunities?",
+          "Job opportunities after graduation?",
+          "Career guidance services?",
+          "Industrial training available?"
+        ],
+        "answer": "ESOFT supports students through career guidance programmes, internship opportunities, and industry collaborations with leading IT companies."
+      },
+
+      {
+        "intent": "career_paths",
+        "questions": [
+          "What careers can I get after software engineering?",
+          "Future jobs for SE graduates?",
+          "Career opportunities in IT?",
+          "Can I become a software engineer?",
+          "What jobs are available after graduation?",
+          "Can I work abroad with this degree?"
+        ],
+        "answer": "Graduates can pursue careers such as Software Engineer, Web Developer, QA Engineer, Systems Analyst, Database Administrator, and IT Project Coordinator."
+      }
+
+    ],
+
+    "campus_life": [
+
+      {
+        "intent": "facilities",
+        "questions": [
+          "Does the campus have a library?",
+          "Are there labs for coding?",
+          "What are the facilities like at Metro Campus?",
+          "Is there Wi-Fi for students?",
+          "Do you have computer labs?",
+          "What facilities are available?",
+          "Is the campus modern?",
+          "Student facilities available?"
+        ],
+        "answer": "ESOFT Metro Campus includes computer labs, digital learning resources, high-speed Wi-Fi, modern classrooms, and student support facilities."
+      },
+
+      {
+        "intent": "student_life",
+        "questions": [
+          "Do you have student clubs?",
+          "Are there extracurricular activities?",
+          "What is student life like?",
+          "Do students have events?",
+          "Sports activities available?",
+          "Is there a student community?"
+        ],
+        "answer": "ESOFT provides a vibrant student environment including clubs, workshops, competitions, student events, and networking opportunities."
+      }
+
+    ],
+
+    "university_and_recognition": [
+
+      {
+        "intent": "awarding_body",
+        "questions": [
+          "Who awards the degree?",
+          "Who is the awarding body for the BSc?",
+          "Is this a London Met degree?",
+          "Is the certificate from London Metropolitan University?",
+          "Which university provides the accreditation?",
+          "Who issues the final certificate?",
+          "Who gives the degree?",
+          "Is London Met the partner university?"
+        ],
+        "answer": "The degree is awarded by London Metropolitan University, UK, in partnership with ESOFT Metro Campus."
+      },
+
+      {
+        "intent": "ugc_recognition",
+        "questions": [
+          "Is the degree recognized by UGC?",
+          "Can I apply for government jobs?",
+          "Is London Met recognized in Sri Lanka?",
+          "UGC status of the degree?",
+          "Is the qualification valid in Sri Lanka?",
+          "Can I use this degree internationally?"
+        ],
+        "answer": "London Metropolitan University is recognized internationally and listed by the University Grants Commission (UGC) Sri Lanka as a recognized foreign university."
+      }
+
+    ]
+
+  }
+}
+
