@@ -2,6 +2,9 @@ import streamlit as st
 import sqlite3
 from datetime import datetime
 import pytz
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+import re
 from streamlit_mic_recorder import speech_to_text
 
 # =================================
@@ -760,37 +763,45 @@ def get_greeting():
     else:
 
         return "🌙 Good Evening"
+    
 # =================================
-# NLP PREPROCESSING
+# ADVANCED TEXT PREPROCESSING
 # =================================
 
 def preprocess_text(text):
 
     text = text.lower()
 
-    stop_words = [
-        "what", "is", "the", "are",
-        "do", "you", "can", "i",
-        "a", "an", "of", "to"
-    ]
+    text = re.sub(r"[^a-zA-Z0-9\s]", "", text)
 
     words = text.split()
 
-    processed = []
+    stop_words = {
+        "the", "is", "are", "am", "a", "an", "to", "of", "for",
+        "in", "on", "at", "by", "with", "and", "or", "from",
+        "do", "does", "did", "can", "could", "would", "should",
+        "i", "you", "we", "they", "he", "she", "it", "my", "your",
+        "me", "about", "please", "tell", "explain", "what", "how",
+        "when", "where", "why"
+    }
+
+    processed_words = []
 
     for word in words:
 
         if word not in stop_words:
 
-            if word.endswith("s"):
+            if word.endswith("s") and len(word) > 3:
+
                 word = word[:-1]
 
-            processed.append(word)
+            processed_words.append(word)
 
-    return " ".join(processed)
+    return " ".join(processed_words)
+
 
 # =================================
-# SAVE KNOWLEDGE
+# SAVE NEW KNOWLEDGE
 # =================================
 
 def save_new_knowledge(question, answer):
@@ -804,8 +815,8 @@ def save_new_knowledge(question, answer):
             VALUES (?, ?)
             """,
             (
-                question.lower(),
-                answer
+                question.lower().strip(),
+                answer.strip()
             )
         )
 
@@ -814,6 +825,7 @@ def save_new_knowledge(question, answer):
     except Exception as e:
 
         print(e)
+
 
 # =====================================================
 # DEFAULT KNOWLEDGE BASE
@@ -990,15 +1002,69 @@ conn.commit()
 
 from difflib import SequenceMatcher
 
-def similarity(a, b):
+# =================================
+# TF-IDF COSINE SIMILARITY
+# =================================
 
-    return SequenceMatcher(
-        None,
-        a.lower(),
-        b.lower()
-    ).ratio()
+def calculate_tfidf_similarity(user_question, stored_questions):
+
+    if not stored_questions:
+
+        return [], 0
+
+    processed_questions = []
+
+    for question in stored_questions:
+
+        processed_questions.append(
+            preprocess_text(question)
+        )
+
+    processed_user_question = preprocess_text(user_question)
+
+    all_texts = processed_questions + [processed_user_question]
+
+    vectorizer = TfidfVectorizer(
+        lowercase=True,
+        ngram_range=(1, 2)
+    )
+
+    try:
+
+        tfidf_matrix = vectorizer.fit_transform(all_texts)
+
+        user_vector = tfidf_matrix[-1]
+
+        question_vectors = tfidf_matrix[:-1]
+
+        similarity_scores = cosine_similarity(
+            user_vector,
+            question_vectors
+        ).flatten()
+
+        best_index = similarity_scores.argmax()
+
+        best_score = similarity_scores[best_index]
+
+        return best_index, best_score
+
+    except Exception as e:
+
+        print(e)
+
+        return None, 0
+    
+# =================================
+# GET ANSWER USING ADVANCED NLP
+# =================================
 
 def get_answer(user_question):
+
+    # -----------------------------
+    # BASIC SMALL TALK
+    # -----------------------------
+
+    cleaned_question = user_question.lower().strip()
 
     greetings = [
         "hi",
@@ -1009,45 +1075,82 @@ def get_answer(user_question):
         "good evening"
     ]
 
-    if user_question.lower().strip() in greetings:
+    thanks = [
+        "thank you",
+        "thanks",
+        "thank u",
+        "thankyou"
+    ]
+
+    if cleaned_question in greetings:
 
         return (
-            f"{get_greeting()}! 👋 "
-            "How can I assist you with ESOFT Metro Campus today?"
+            f"{get_greeting()}! How can I help you today?",
+            1.0
         )
 
+    if cleaned_question in thanks:
+
+        return (
+            "You're welcome! Let me know if you need help with courses, fees, scholarships, or registration.",
+            1.0
+        )
+
+    # -----------------------------
+    # FETCH KNOWLEDGE BASE
+    # -----------------------------
+
     cursor.execute(
-        "SELECT question, answer FROM knowledge"
+        """
+        SELECT question, answer
+        FROM knowledge
+        """
     )
 
-    rows = cursor.fetchall()
+    data = cursor.fetchall()
 
-    best_match = None
-    best_score = 0
+    if not data:
 
-    for db_question, db_answer in rows:
+        return None, 0
 
-        processed_user = preprocess_text(user_question)
-        processed_db = preprocess_text(db_question)
+    stored_questions = []
 
-        score = similarity(
-            processed_user,
-            processed_db
-        )       
+    stored_answers = []
 
-        if score > best_score:
+    for row in data:
 
-            best_score = score
-            best_match = db_answer
+        stored_questions.append(row[0])
 
-    # similarity threshold
+        stored_answers.append(row[1])
 
-    if best_score >= 0.25:
+    # -----------------------------
+    # TF-IDF MATCHING
+    # -----------------------------
 
-        return best_match
+    best_index, best_score = calculate_tfidf_similarity(
+        user_question,
+        stored_questions
+    )
 
-    return None
+    if best_index is None:
 
+        return None, 0
+
+    # -----------------------------
+    # CONFIDENCE THRESHOLD
+    # -----------------------------
+
+    if best_score >= 0.30:
+
+        return (
+            stored_answers[best_index],
+            best_score
+        )
+
+    else:
+
+        return None, best_score
+    
 # =================================
 # SESSION STATE
 # =================================
@@ -1160,7 +1263,7 @@ with st.expander(
 
                 if st.button(
                     question,
-                    key=f"supported_{index}_{question}"
+                    key=f"supported_{index}"
                 ):
 
                     st.session_state.messages.append(
@@ -1170,7 +1273,7 @@ with st.expander(
                         }
                     )
 
-                    answer = get_answer(question)
+                    answer, confidence = get_answer(question)
 
                     if answer:
 
@@ -1183,7 +1286,7 @@ with st.expander(
 
                     else:
 
-                        st.session_state.messages.append(
+                       st.session_state.messages.append(
                             {
                                 "role": "bot",
                                 "content":
@@ -1258,7 +1361,7 @@ with center_col:
 
             user_input = spoken_text
 
-            st.success(f"🗣️ You said: {spoken_text}")
+            
 
     with text_col:
 
@@ -1304,28 +1407,28 @@ if user_input:
         }
     )
 
-    answer = get_answer(user_input)
+    answer, confidence = get_answer(user_input)
 
-    if answer:
+if answer:
 
-        st.session_state.messages.append(
-            {
-                "role": "bot",
-                "content": answer
-            }
-        )
+    st.session_state.messages.append(
+        {
+            "role": "bot",
+            "content": answer
+        }
+    )
 
-    else:
+else:
 
-        st.session_state.messages.append(
-            {
-                "role": "bot",
-                "content":
-                "I do not know the answer yet. Please teach me below."
-            }
-        )
+    st.session_state.messages.append(
+        {
+            "role": "bot",
+            "content":
+            "I do not know the answer yet. Please teach me below."
+        }
+    )
 
-        st.session_state.unknown_question = user_input
+    st.session_state.unknown_question = user_input
 
     st.rerun()
 
@@ -1359,18 +1462,25 @@ if st.session_state.messages:
                 st.session_state.messages[-2]["content"]
             )
 
-            cursor.execute(
-                "INSERT INTO knowledge VALUES (?, ?)",
-                (
-                    question_to_save.lower(),
+            if new_answer.strip():
+
+                save_new_knowledge(
+                    question_to_save,
                     new_answer
                 )
-            )
 
-            conn.commit()
+                st.success(
+                    "✅ Knowledge saved successfully!"
+                )
 
-            st.success(
-                "✅ Knowledge saved successfully!"
-            )
+                st.session_state.unknown_question = None
+
+                st.rerun()
+
+            else:
+
+                st.warning(
+                    "Please enter an answer before saving."
+                )
 
             st.rerun()
