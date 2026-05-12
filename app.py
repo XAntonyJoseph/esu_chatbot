@@ -976,31 +976,10 @@ default_knowledge = [
 
 for question, answer in default_knowledge:
 
-    cursor.execute(
-        "SELECT * FROM knowledge WHERE question=?",
-        (question,)
+    save_new_knowledge(
+        question,
+        answer
     )
-
-    existing = cursor.fetchone()
-
-    if not existing:
-
-        cursor.execute(
-            """
-            INSERT INTO knowledge (question, answer)
-            VALUES (?, ?)
-            """,
-            (question.lower(), answer)
-        )
-
-conn.commit()
-
-
-# =================================
-# GET ANSWER
-# =================================
-
-from difflib import SequenceMatcher
 
 # =================================
 # TF-IDF COSINE SIMILARITY
@@ -1409,26 +1388,26 @@ if user_input:
 
     answer, confidence = get_answer(user_input)
 
-if answer:
+    if answer:
 
-    st.session_state.messages.append(
-        {
-            "role": "bot",
-            "content": answer
-        }
-    )
+        st.session_state.messages.append(
+            {
+                "role": "bot",
+                "content": answer
+            }
+        )
 
-else:
+    else:
 
-    st.session_state.messages.append(
-        {
-            "role": "bot",
-            "content":
-            "I do not know the answer yet. Please teach me below."
-        }
-    )
+        st.session_state.messages.append(
+            {
+                "role": "bot",
+                "content":
+                "I do not know the answer yet. Please teach me below."
+            }
+        )
 
-    st.session_state.unknown_question = user_input
+        st.session_state.unknown_question = user_input
 
     st.rerun()
 
@@ -1482,5 +1461,3 @@ if st.session_state.messages:
                 st.warning(
                     "Please enter an answer before saving."
                 )
-
-            st.rerun()
